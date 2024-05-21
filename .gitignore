@@ -1,0 +1,10 @@
+# IntelliJ
+.idea/
+
+# Maven
+target/
+
+# Resources
+*.ser
+.idea/misc.xml
+.idea/misc.xml
