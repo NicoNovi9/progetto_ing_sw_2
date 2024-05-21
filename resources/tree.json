@@ -1,0 +1,97 @@
+{
+  "name" : "-",
+  "description" : "root",
+  "children" : [ {
+    "name" : "musica",
+    "description" : "Lezioni di musica",
+    "children" : [ {
+      "name" : "chitarra",
+      "description" : "Lezioni di chitarra",
+      "children" : [ {
+        "name" : "teoria",
+        "description" : "Lezioni di teoria",
+        "children" : null,
+        "path" : "--musica-chitarra-teoria",
+        "leaf" : true
+      }, {
+        "name" : "pratica",
+        "description" : "Lezioni di pratica",
+        "children" : null,
+        "path" : "--musica-chitarra-pratica",
+        "leaf" : true
+      }, {
+        "name" : "ripasso",
+        "description" : "Lezioni di ripasso",
+        "children" : null,
+        "path" : "--musica-chitarra-ripasso",
+        "leaf" : true
+      }, {
+        "name" : "simulazione",
+        "description" : "Lezioni di simulazione",
+        "children" : null,
+        "path" : "--musica-chitarra-simulazione",
+        "leaf" : true
+      } ],
+      "path" : "--musica-chitarra",
+      "leaf" : false
+    }, {
+      "name" : "pianoforte",
+      "description" : "Lezioni di pianoforte",
+      "children" : [ ],
+      "path" : "--musica-pianoforte",
+      "leaf" : false
+    } ],
+    "path" : "--musica",
+    "leaf" : false
+  }, {
+    "name" : "storia",
+    "description" : "Lezioni di stroria",
+    "children" : [ {
+      "name" : "storia di francia",
+      "description" : "Lezioni di storia di Francia",
+      "children" : [ {
+        "name" : "napoleone",
+        "description" : "Lezioni su Napoleone",
+        "children" : null,
+        "path" : "--storia-storia di francia-napoleone",
+        "leaf" : true
+      } ],
+      "path" : "--storia-storia di francia",
+      "leaf" : false
+    } ],
+    "path" : "--storia",
+    "leaf" : false
+  }, {
+    "name" : "italiano",
+    "description" : "Lezioni di musica",
+    "children" : [ {
+      "name" : "dante",
+      "description" : "Lezioni sulle opere di Dante",
+      "children" : [ {
+        "name" : "inferno",
+        "description" : "Lezioni sull'inferno di Dante",
+        "children" : null,
+        "path" : "--italiano-dante-inferno",
+        "leaf" : true
+      }, {
+        "name" : "purgatorio",
+        "description" : "Lezioni sul purgatorio di Dante",
+        "children" : null,
+        "path" : "--italiano-dante-purgatorio",
+        "leaf" : true
+      }, {
+        "name" : "paradiso",
+        "description" : "Lezioni sul paradiso di Dante",
+        "children" : null,
+        "path" : "--italiano-dante-paradiso",
+        "leaf" : true
+      } ],
+      "path" : "--italiano-dante",
+      "leaf" : false
+    } ],
+    "path" : "--italiano",
+    "leaf" : false
+  } ],
+  "path" : "-",
+  "leaf" : false
+}
