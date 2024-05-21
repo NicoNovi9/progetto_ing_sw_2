@@ -59,22 +59,22 @@ public class Main {
         Node parent0 = rootArray.get(0).getChildren().get(0);
         Node parent1 = rootArray.get(1).getChildren().get(0);
         Node parent2 = rootArray.get(2).getChildren().get(0);
-        System.out.println(controller.addLeaf(
-                "teoria", "Lezioni di teoria", parent0, null, null));
-        System.out.println(controller.addLeaf(
-                "pratica", "Lezioni di pratica", parent0, 0.55, "--musica-chitarra-teoria"));
-        System.out.println(controller.addLeaf(
-                "ripasso", "Lezioni di ripasso", parent0, 1.5, "--musica-chitarra-teoria"));
-        System.out.println(controller.addLeaf(
-                "simulazione", "Lezioni di simulazione", parent0, 0.7, "--musica-chitarra-teoria"));
-        System.out.println(controller.addLeaf(
-                "napoleone", "Lezioni su Napoleone", parent1, 1.2, "--musica-chitarra-teoria"));
-        System.out.println(controller.addLeaf(
-                "inferno", "Lezioni sull'inferno di Dante", parent2, 0.5, "--musica-chitarra-teoria"));
-        System.out.println(controller.addLeaf(
-                "purgatorio", "Lezioni sul purgatorio di Dante", parent2, 0.53, "--musica-chitarra-teoria"));
-        System.out.println(controller.addLeaf(
-                "paradiso", "Lezioni sul paradiso di Dante", parent2, 1.5, "--musica-chitarra-teoria"));
+        controller.addLeaf(
+                "teoria", "Lezioni di teoria", parent0, null, null);
+        controller.addLeaf(
+                "pratica", "Lezioni di pratica", parent0, 0.55, "--musica-chitarra-teoria");
+        controller.addLeaf(
+                "ripasso", "Lezioni di ripasso", parent0, 1.5, "--musica-chitarra-teoria");
+        controller.addLeaf(
+                "simulazione", "Lezioni di simulazione", parent0, 0.7, "--musica-chitarra-teoria");
+        controller.addLeaf(
+                "napoleone", "Lezioni su Napoleone", parent1, 1.2, "--musica-chitarra-teoria");
+        controller.addLeaf(
+                "inferno", "Lezioni sull'inferno di Dante", parent2, 0.5, "--musica-chitarra-teoria");
+        controller.addLeaf(
+                "purgatorio", "Lezioni sul purgatorio di Dante", parent2, 0.53, "--musica-chitarra-teoria");
+        controller.addLeaf(
+                "paradiso", "Lezioni sul paradiso di Dante", parent2, 1.5, "--musica-chitarra-teoria");
 
     }
 }
