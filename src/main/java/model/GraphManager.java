@@ -25,6 +25,7 @@ public class GraphManager {
     }
 
     public List<Integer> getAdjacent(int nodo) {
+
         return graph.getOrDefault(nodo, new LinkedList<>());
     }
 
@@ -44,7 +45,6 @@ public class GraphManager {
     public List<Integer> findClosedPath(List<Integer> nodiDiArrivo, int startingNode) {
         foundPaths.clear();
         List<Integer> longhestPath = new ArrayList<>();
-
 
         for (int node : nodiDiArrivo) {
             findPaths(startingNode, node);

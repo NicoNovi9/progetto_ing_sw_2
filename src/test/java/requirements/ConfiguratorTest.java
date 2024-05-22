@@ -28,7 +28,7 @@ public class ConfiguratorTest {
     public static String BB4 = "bb4", CC5 = "cc5", CC6 = "cc6", CC7 = "cc7";
 
     @BeforeEach
-    public void setUp() throws LeafException {
+    public void setUp() {
 
         InterfaceDatabase database = new LocalDatabase(RESOURCES_PATH);
         Model model = new Model(database);
@@ -79,21 +79,6 @@ public class ConfiguratorTest {
         controllerConfigurator.addLeaf(
                 CC7, "", parent2, 1.5, "--"+C+"-"+CC+"-"+CC6);
 
-    }
-
-
-    public static void cleanUpFiles() throws IOException {
-        File resourceFile = new File(RESOURCES_PATH);
-        try (BufferedReader br = new BufferedReader(new FileReader(resourceFile))) {
-            String filePath;
-            while ((filePath = br.readLine()) != null) {
-                File file = new File(filePath);
-                if (file.exists()) {
-                    FileWriter fw = new FileWriter(file, false);
-                    fw.write("");
-                }
-            }
-        }
     }
 
     @Test
