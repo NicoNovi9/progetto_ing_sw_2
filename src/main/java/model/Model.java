@@ -24,8 +24,6 @@ public class Model {
         transactions = new Transactions();
         graphManager = new GraphManager();
         this.database = database;
-
-
     }
 
 
@@ -294,17 +292,6 @@ public class Model {
         }
 
     }
-
-
-    public GraphManager getTransactionManager() {
-        return graphManager;
-    }
-
-    public Transactions getTransactions() {
-        return transactions;
-
-    }
-
 
     public Transaction createNewTransaction(Node requestedLeaf, Node offeredLeaf, int requestedHours, String applicantName, String applicantDistrict) {
         if (requestedLeaf.getPath().equals(offeredLeaf.getPath()))
