@@ -1,4 +1,4 @@
-package requirements;
+package blackbox;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;

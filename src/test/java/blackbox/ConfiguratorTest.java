@@ -1,4 +1,4 @@
-package requirements;
+package blackbox;
 
 import controller.ControllerConfigurator;
 import model.LeafException;

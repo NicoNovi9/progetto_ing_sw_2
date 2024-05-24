@@ -1,0 +1,7 @@
+src/test/java/blackbox/resources/conversion_test.csv
+src/test/java/blackbox/resources/districts_test.csv
+src/test/java/blackbox/resources/tree.json
+src/test/java/blackbox/resources/default_test.csv
+src/test/java/blackbox/resources/credentials_test.csv
+src/test/java/blackbox/resources/transactions_test.csv
+src/test/java/blackbox/resources/id_test.txt
