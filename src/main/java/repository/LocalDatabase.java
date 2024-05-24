@@ -277,11 +277,10 @@ public class LocalDatabase implements InterfaceDatabase {
             while ((line = reader.readNext()) != null) {
                 array.add(line);
             }
-            return array.toArray(new String[0][]); // Convert ArrayList to 2D array
+            return array.toArray(new String[0][]);
         } catch (IOException | CsvValidationException e) {
-            e.printStackTrace(); // Handle exception appropriately
+            return new String[0][];
         }
-        return new String[0][]; // Return an empty 2D array if loading fails
     }
 
     @Override

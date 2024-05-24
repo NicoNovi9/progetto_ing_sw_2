@@ -52,7 +52,10 @@ public class Model {
     public AddLeafStatus addLeaf(String name, String description, Node parents, Double factor, String conversionPath) throws LeafException {
         String currentPath = parents.getPath().toLowerCase() + "-" + name.toLowerCase();
 
-        if (!factorsIsEmpty()) { // necessario dato che la prima volta factor sarà -1 e poi darebbe errore >= con null
+        if (!factorsIsEmpty()) { // necessario dato che la prima volta factor e conversionPath saranno null
+            if (factor == null){
+                return AddLeafStatus.INVALID_CONVERSION_FACTOR;
+            }
             if (factor <= (0.5 - LAMBDA) || factor >= (2.0 + LAMBDA))
                 return AddLeafStatus.INVALID_CONVERSION_FACTOR;
             if (!containsLeaf(conversionPath))
