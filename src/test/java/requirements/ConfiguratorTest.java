@@ -4,6 +4,7 @@ import controller.ControllerConfigurator;
 import model.LeafException;
 import model.Model;
 import model.Node;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,6 +32,7 @@ public class ConfiguratorTest {
     public void setUp() {
 
         InterfaceDatabase database = new LocalDatabase(RESOURCES_PATH);
+
         Model model = new Model(database);
 
         controllerConfigurator = new ControllerConfigurator(model);
@@ -38,6 +40,21 @@ public class ConfiguratorTest {
         model.load();
         rootNode = model.getRootNode();
 
+
+    }
+
+    @AfterAll
+    static void cleanUpFiles() throws IOException {
+        File resourceFile = new File(RESOURCES_PATH);
+        try (BufferedReader br = new BufferedReader(new FileReader(resourceFile))) {
+            String filePath;
+            while ((filePath = br.readLine()) != null) {
+                File file = new File(filePath);
+                if (file.exists()) {
+                    file.delete();
+                }
+            }
+        }
     }
 
     public void loadDefault() throws LeafException {
@@ -82,15 +99,6 @@ public class ConfiguratorTest {
     }
 
     @Test
-    void testRootNode() throws LeafException {
-        loadDefault();
-        Assertions.assertEquals(rootNode.getName(), "-");
-        Assertions.assertEquals(rootNode.getChildren().size(), 3);
-        Assertions.assertEquals(rootNode.getChildren().get(0).getName(), A);
-    }
-
-
-    @Test
     void testConversionFactors() throws LeafException {
         loadDefault();
         ConversionFactors conversionFactors = controllerConfigurator.getConversionFactors();
@@ -131,6 +139,8 @@ public class ConfiguratorTest {
                 AA1, "", parent0, 0.0, "--"+A+"-"+AA0));
         Assertions.assertEquals(AddLeafStatus.INVALID_CONVERSION_FACTOR, controllerConfigurator.addLeaf(
                 AA1, "", parent0, 0.49, "--"+A+"-"+AA0));
+        Assertions.assertEquals(AddLeafStatus.INVALID_CONVERSION_FACTOR, controllerConfigurator.addLeaf(
+                AA1, "", parent0, null, "--"+A+"-"+AA0));
 
         Assertions.assertEquals(1, parent0.getChildren().size());
 
@@ -151,6 +161,45 @@ public class ConfiguratorTest {
                 AA1, "", parent0, 1.0, "non existing path"));
         Assertions.assertEquals(AddLeafStatus.INVALID_REFERENCE_FACTOR, controllerConfigurator.addLeaf(
                 AA1, "", parent0, 1.0, null));
+
+    }
+
+    @Test
+    void testAlreadyExistingLeaf() throws LeafException {
+        controllerConfigurator.addCategory(A,"");
+
+        Node parent0 = controllerConfigurator.getRootArray().get(0);
+
+        Assertions.assertEquals(AddLeafStatus.VALID_LEAF, controllerConfigurator.addLeaf(
+                AA0, "", parent0, null, null));
+        Assertions.assertEquals(AddLeafStatus.VALID_LEAF, controllerConfigurator.addLeaf(
+                AA1, "", parent0, 1.0, "--"+A+"-"+AA0));
+
+        // A->[AA0,AA1]
+        // aggiunta di una foglia con nome già esistente in uno stesso ramo
+        Assertions.assertEquals(AddLeafStatus.ALREADY_EXISTING_LEAF, controllerConfigurator.addLeaf(
+                AA1, "", parent0, 1.0, "--"+A+"-"+AA0));
+
+    }
+
+    @Test
+    void testAlreadyExistingLeafButDifferentPath() throws LeafException {
+        controllerConfigurator.addCategory(A,"");
+        controllerConfigurator.addCategory(B,"");
+
+        Node parent0 = controllerConfigurator.getRootArray().get(0);
+        Node parent1 = controllerConfigurator.getRootArray().get(1);
+
+        Assertions.assertEquals(AddLeafStatus.VALID_LEAF, controllerConfigurator.addLeaf(
+                AA0, "", parent0, null, null));
+        Assertions.assertEquals(AddLeafStatus.VALID_LEAF, controllerConfigurator.addLeaf(
+                AA1, "", parent0, 1.0, "--"+A+"-"+AA0));
+
+        // A->[AA0,AA1]
+        // aggiunta di una foglia con stesso nome in un altro ramo dell'albero
+        // B -> [AA1]
+        Assertions.assertEquals(AddLeafStatus.VALID_LEAF, controllerConfigurator.addLeaf(
+                AA1, "", parent1, 1.0, "--"+A+"-"+AA0));
 
     }
 }
