@@ -14,11 +14,51 @@ public class TransactionManager {
         this.graphManager = new GraphManager();
     }
 
-    public void updateTransactionManager(Transaction transaction) {
+    public void loadTransactionsManager(Transactions transactions) {
+        this.transactions = transactions;
+        for (Map.Entry<Integer, Transaction> entry : this.transactions.getTransactions().entrySet()) {
+            Transaction t = entry.getValue();
+            fillGraph(t);
+        }
+    }
+
+    private void fillGraph(Transaction transaction) {
+        for (Map.Entry<Integer, Transaction> entry : transactions.getTransactions().entrySet()) {
+            Transaction t = entry.getValue();
+            if ((t.status().equals(TransactionStatus.OPEN)) && transaction.district().equals(t.district())) {
+                if (transaction.requestedLeaf().equals(t.offeredLeaf()) &&
+                        (transaction.requestedHours() >= (t.offeredHours() - 2) && transaction.requestedHours() <= (t.offeredHours() + 2)))
+                    graphManager.addEdge(t.id(), transaction.id());
+            }
+        }
+    }
+
+    private void updateGraph(Transaction transaction) {
         List<Integer> possibiliOfferte = addTransactionToGraph(transaction);
         if (!possibiliOfferte.isEmpty())
             resolveTransaction(transaction.id(), possibiliOfferte);
 
+    }
+
+    private ArrayList<Integer> addTransactionToGraph(Transaction transaction) {
+
+        ArrayList<Integer> temp = new ArrayList<>();
+        for (Map.Entry<Integer, Transaction> entry : transactions.getTransactions().entrySet()) {
+            Transaction t = entry.getValue();
+            if ((t.status().equals(TransactionStatus.OPEN)) && transaction.district().equals(t.district())) {
+                if (transaction.requestedLeaf().equals(t.offeredLeaf()) &&
+                        (transaction.requestedHours() >= (t.offeredHours() - 2) || transaction.requestedHours() <= (t.offeredHours() + 2))) {
+                    graphManager.addEdge(t.id(), transaction.id());
+                    temp.add(t.id());
+                }
+                if (t.requestedLeaf().equals(transaction.offeredLeaf()) &&
+                        (t.requestedHours() >= (transaction.offeredHours() - 2) || t.requestedHours() <= (transaction.offeredHours() + 2))) {
+                    graphManager.addEdge(transaction.id(), t.id());
+
+                }
+            }
+        }
+        return temp;
     }
 
     private void resolveTransaction(int transaction, List<Integer> possibiliOfferte) {
@@ -43,52 +83,9 @@ public class TransactionManager {
         transactions.updateTransactionCloser(t, closerName);
     }
 
-
-    private ArrayList<Integer> addTransactionToGraph(Transaction transaction) {
-
-        ArrayList<Integer> temp = new ArrayList<>();
-        for (Map.Entry<Integer, Transaction> entry : transactions.getTransactions().entrySet()) {
-            Transaction t = entry.getValue();
-            if ((t.status().equals(TransactionStatus.OPEN)) && transaction.district().equals(t.district())) {
-                if (transaction.requestedLeaf().equals(t.offeredLeaf()) &&
-                        (transaction.requestedHours() >= (t.offeredHours() - 2) || transaction.requestedHours() <= (t.offeredHours() + 2))) {
-                    graphManager.addEdge(t.id(), transaction.id());
-                    temp.add(t.id());
-                }
-                if (t.requestedLeaf().equals(transaction.offeredLeaf()) &&
-                        (t.requestedHours() >= (transaction.offeredHours() - 2) || t.requestedHours() <= (transaction.offeredHours() + 2))) {
-                    graphManager.addEdge(transaction.id(), t.id());
-
-                }
-            }
-        }
-        return temp;
-    }
-
-    public void loadTransactionsManager(Transactions transactions) {
-        this.transactions = transactions;
-        for (Map.Entry<Integer, Transaction> entry : this.transactions.getTransactions().entrySet()) {
-            Transaction t = entry.getValue();
-            fillTransactionGraph(t);
-        }
-
-    }
-
-    private void fillTransactionGraph(Transaction transaction) {
-        for (Map.Entry<Integer, Transaction> entry : transactions.getTransactions().entrySet()) {
-            Transaction t = entry.getValue();
-            if ((t.status().equals(TransactionStatus.OPEN)) && transaction.district().equals(t.district())) {
-                if (transaction.requestedLeaf().equals(t.offeredLeaf()) &&
-                        (transaction.requestedHours() >= (t.offeredHours() - 2) && transaction.requestedHours() <= (t.offeredHours() + 2)))
-                    graphManager.addEdge(t.id(), transaction.id());
-            }
-        }
-
-    }
-
     public void addTransaction(Transaction t) {
         transactions.addTransaction(t);
-        updateTransactionManager(t);
+        updateGraph(t);
     }
 
     public List<Transaction> searchByStatus(TransactionStatus status) {

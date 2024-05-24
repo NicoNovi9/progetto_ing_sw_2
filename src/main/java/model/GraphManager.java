@@ -4,11 +4,6 @@ import java.util.*;
 
 public class GraphManager {
 
-
-    public Map<Integer, List<Integer>> getGraph() {
-        return graph;
-    }
-
     List<List<Integer>> foundPaths;
 
     private final Map<Integer, List<Integer>> graph;
@@ -17,7 +12,6 @@ public class GraphManager {
         graph = new HashMap<>();
         foundPaths = new ArrayList<>();
     }
-
 
     public void addEdge(int from, int to) {
         graph.putIfAbsent(from, new LinkedList<>());
