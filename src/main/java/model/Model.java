@@ -14,15 +14,13 @@ public class Model {
     private Node rootNode;
     private ConversionFactors conversionFactors;
     private Districts districts;
-    private Transactions transactions;
-    private final GraphManager graphManager;
+    private TransactionManager transactionManager;
     InterfaceDatabase database;
 
     public Model(InterfaceDatabase database) {
         districts = new Districts();
         conversionFactors = new ConversionFactors();
-        transactions = new Transactions();
-        graphManager = new GraphManager();
+        transactionManager = new TransactionManager();
         this.database = database;
     }
 
@@ -138,7 +136,7 @@ public class Model {
 
         status.add(database.saveTree(rootNode));
         status.add(database.saveConversionFactors(conversionFactors));
-        status.add(database.saveTransactions(transactions));
+        status.add(database.saveTransactions(transactionManager.getTransactions()));
         status.add(database.saveDistricts(districts));
 
         return status;
@@ -148,18 +146,8 @@ public class Model {
         rootNode = database.loadTree();
         conversionFactors = database.loadConversionFactors();
         districts = database.loadDistricts();
-        transactions = database.loadTransactions();
-        loadTransactionsManager();
+        transactionManager.loadTransactionsManager(database.loadTransactions());
     }
-
-    private void loadTransactionsManager() {
-        for (Map.Entry<Integer, Transaction> entry : transactions.getTransactions().entrySet()) {
-            Transaction t = entry.getValue();
-            fillTransactionGraph(t);
-        }
-
-    }
-
 
     public int generateID() {
         return database.generateID();
@@ -181,12 +169,6 @@ public class Model {
         return database.getUser(name);
     }
 
-    // funzione usata per il testing
-    public void setRootNode(Node rootNode) {
-        this.rootNode = rootNode;
-    }
-
-
     public boolean incorrectIndex(Node node, int index) {
         return (index < 0 || index >= node.getChildren().size());
     }
@@ -196,98 +178,14 @@ public class Model {
         return getUserFromDB(name);
     }
 
-    //START TRANSACTION REGION
-    public List<Transaction> searchByStatus(TransactionStatus status) {
-        return transactions.searchByStatus(status);
-    }
-
-    public List<Transaction> searchByRequestedLeaf(String path) {
-        return transactions.searchByRequestedLeaf(path);
-    }
-
-    public List<Transaction> searchByOfferedLeaf(String path) {
-        return transactions.searchByOfferedLeaf(path);
-    }
-
-    public List<Transaction> searchByApplicant(String name) {
-        return transactions.searchByApplicant(name);
+    public User setCurrentUser(String name) {
+        return getUserFromDB(name);
     }
 
 
-    public void changeTransactionStatus(Transaction t, TransactionStatus status) {
-        transactions.updateTransactionStatus(t.id(), status);
-    }
-
-    private void changeTransactionCloser(Transaction t, String closerName) {
-        transactions.updateTransactionCloser(t, closerName);
-    }
-
-    public void addTransaction(Transaction t) {
-        transactions.addTransaction(t);
-        updateTransactionManager(t);
-    }
-
-
-    public void updateTransactionManager(Transaction transaction) {
-        List<Integer> possibiliOfferte = addTransactionToGraph(transaction);
-        if (!possibiliOfferte.isEmpty())
-            resolveTransaction(transaction.id(), possibiliOfferte);
-
-    }
-
-    public boolean resolveTransaction(int transaction, List<Integer> possibiliOfferte) {
-        List<Integer> closedTransaction = graphManager.findClosedPath(possibiliOfferte, transaction);
-        if (closedTransaction.isEmpty())
-            return false;
-        graphManager.removeNodes(closedTransaction);
-        //questo ciclo for ha senso solo se dentro il closedTransaction i numeri hanno un ordine(da controllare)
-        for (int i = 0; i < closedTransaction.size(); i++) {
-            int id = closedTransaction.get(i);
-            changeTransactionStatus(transactions.getTransaction(id), TransactionStatus.CLOSED);
-            int id2;
-            if (i == (closedTransaction.size() - 1))
-                id2 = closedTransaction.get(0);
-            else id2 = closedTransaction.get(i + 1);
-            changeTransactionCloser(transactions.getTransaction(id), transactions.getTransaction(id2).applicantName());
-        }
-        return true;
-
-    }
-
-
-    public ArrayList<Integer> addTransactionToGraph(Transaction transaction) {
-
-        ArrayList<Integer> temp = new ArrayList<>();
-        for (Map.Entry<Integer, Transaction> entry : transactions.getTransactions().entrySet()) {
-            Transaction t = entry.getValue();
-            if ((t.status().equals(TransactionStatus.OPEN)) && transaction.district().equals(t.district())) {
-                if (transaction.requestedLeaf().equals(t.offeredLeaf()) &&
-                        (transaction.requestedHours() >= (t.offeredHours() - 2) || transaction.requestedHours() <= (t.offeredHours() + 2))) {
-                    graphManager.addEdge(t.id(), transaction.id());
-                    temp.add(t.id());
-                }
-                if (t.requestedLeaf().equals(transaction.offeredLeaf()) &&
-                        (t.requestedHours() >= (transaction.offeredHours() - 2) || t.requestedHours() <= (transaction.offeredHours() + 2))) {
-                    graphManager.addEdge(transaction.id(), t.id());
-
-                }
-            }
-        }
-        return temp;
-    }
-
-    private void fillTransactionGraph(Transaction transaction) {
-        for (Map.Entry<Integer, Transaction> entry : transactions.getTransactions().entrySet()) {
-            Transaction t = entry.getValue();
-            if ((t.status().equals(TransactionStatus.OPEN)) && transaction.district().equals(t.district())) {
-                if (transaction.requestedLeaf().equals(t.offeredLeaf()) &&
-                        (transaction.requestedHours() >= (t.offeredHours() - 2) && transaction.requestedHours() <= (t.offeredHours() + 2)))
-                    graphManager.addEdge(t.id(), transaction.id());
-            }
-        }
-
-    }
-
+    // il model si occupa solo di creare la transazione dato che ha le info per poterla creare
+    // (es: fattori di conversione)
+    // a gestirle è poi il transacrionManager
     public Transaction createNewTransaction(Node requestedLeaf, Node offeredLeaf, int requestedHours, String applicantName, String applicantDistrict) {
         if (requestedLeaf.getPath().equals(offeredLeaf.getPath()))
             return null;
@@ -298,12 +196,27 @@ public class Model {
                 offeredLeaf.getPath(), requestedHours, offeredHours, TransactionStatus.OPEN, null);
     }
 
-    public User setCurrentUser(String name) {
-        return getUserFromDB(name);
+    public void changeTransactionStatus(Transaction t, TransactionStatus status) {
+        transactionManager.changeTransactionStatus(t, status);
     }
 
+    public List<Transaction> searchByApplicant(String name) {
+        return transactionManager.searchByApplicant(name);
+    }
 
-    public Transactions getTransactions() {
-        return transactions;
+    public void addTransaction(Transaction t) {
+        transactionManager.addTransaction(t);
+    }
+
+    public List<Transaction> searchByStatus(TransactionStatus status) {
+        return transactionManager.searchByStatus(status);
+    }
+
+    public List<Transaction> searchByRequestedLeaf(String path) {
+        return transactionManager.searchByRequestedLeaf(path);
+    }
+
+    public List<Transaction> searchByOfferedLeaf(String path) {
+        return transactionManager.searchByOfferedLeaf(path);
     }
 }
