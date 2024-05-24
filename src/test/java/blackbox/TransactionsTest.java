@@ -1,27 +1,114 @@
 package blackbox;
 
 import controller.ControllerConfigurator;
+import controller.ControllerUser;
+import model.LeafException;
 import model.Model;
 import model.Node;
+import model.Transaction;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import repository.InterfaceDatabase;
 import repository.LocalDatabase;
+import returnStatus.TransactionStatus;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 public class TransactionsTest {
-    public static String RESOURCES_PATH = "src/test/java/requirements/resources/resources_path_test.txt";
+    public static String RESOURCES_PATH = "src/test/java/blackbox/resources/resources_path_test.txt";
     public ControllerConfigurator controllerConfigurator;
+    public ControllerUser controllerUser;
+    public Model model;
 
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws LeafException {
+
+        loadCredentialsForUser();
 
         InterfaceDatabase database = new LocalDatabase(RESOURCES_PATH);
 
-        Model model = new Model(database);
+        model = new Model(database);
 
         controllerConfigurator = new ControllerConfigurator(model);
+        controllerUser = new ControllerUser(model);
 
         model.load();
-        Node rootNode = model.getRootNode();
+
+        TS.loadDefaultTree(controllerConfigurator);
+        model.save();
+
 
     }
+
+    // per testare le transazioni in modo balck-box è necessario avere i file delle credenziali utente
+    // e il file con l'id da assegnare alla prossima transazione creata
+    private static void loadCredentialsForUser() {
+        Path sourcePath1 = Paths.get("src/test/resources/credentials_test.csv");
+        Path destinationPath1 = Paths.get("src/test/java/blackbox/resources/credentials_test.csv");
+        Path idSourcePath1 = Paths.get("src/test/resources/id_test.txt");
+        Path idDestinationPath1 = Paths.get("src/test/java/blackbox/resources/id_test.txt");
+
+        try {
+            Files.copy(sourcePath1, destinationPath1, StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(idSourcePath1, idDestinationPath1, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @AfterAll
+    static void cleanUpFiles() throws IOException {
+        File resourceFile = new File(RESOURCES_PATH);
+        try (BufferedReader br = new BufferedReader(new FileReader(resourceFile))) {
+            String filePath;
+            while ((filePath = br.readLine()) != null) {
+                File file = new File(filePath);
+                if (file.exists()) {
+                    file.delete();
+                }
+            }
+        }
+    }
+
+    @Test
+    void testAddTransaction(){
+        // con la view è guidato nella selezione del nodo
+        Node n1 = controllerConfigurator.getRootArray().get(0).getChildren().get(0).getChildren().get(0);
+        Node n2 = controllerConfigurator.getRootArray().get(1).getChildren().get(0).getChildren().get(0);
+
+        controllerUser.setCurrentUser("test1");
+        int requested_hours = 10;
+        Transaction t = controllerUser.createNewTransaction(n2, n1, requested_hours);
+        controllerUser.addTransaction(t);
+
+        Assertions.assertEquals(0, t.id());
+        Assertions.assertEquals(n1.getPath(), t.offeredLeaf());
+        Assertions.assertEquals(n2.getPath(), t.requestedLeaf());
+        Assertions.assertEquals(controllerUser.getCurrentUser().district(), t.district());
+        Assertions.assertEquals(requested_hours, t.requestedHours());
+        Assertions.assertEquals(
+                requested_hours * model
+                        .getConversionFactors()
+                        .findTripleValue(n2.getPath(),n1.getPath()),
+                t.offeredHours());
+        Assertions.assertEquals(TransactionStatus.OPEN,t.status());
+
+        controllerUser.setCurrentUser("test2");
+        Transaction t1 = controllerUser.createNewTransaction(n1, n2, t.offeredHours());
+        controllerUser.addTransaction(t1);
+
+        // numeor di transizioni chiuse
+        Assertions.assertEquals(2, controllerConfigurator.getTransactionsByStatus(TransactionStatus.CLOSED).size());
+
+    }
+
 }

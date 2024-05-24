@@ -222,17 +222,9 @@ public class Model {
         transactions.updateTransactionCloser(t, closerName);
     }
 
-    private Transaction assignTransId(Transaction t) {
-        return transactions.assignTransactionId(t, generateID());
-    }
-
-
-    public boolean addTransaction(Transaction t) {
-        Transaction updateT = assignTransId(t);
-        transactions.addTransaction(updateT);
-        System.out.println(updateT);
-        updateTransactionManager(updateT);
-        return true;
+    public void addTransaction(Transaction t) {
+        transactions.addTransaction(t);
+        updateTransactionManager(t);
     }
 
 
@@ -302,7 +294,7 @@ public class Model {
         if (requestedHours <= 0)
             return null;
         int offeredHours = (int) Math.round(requestedHours * (findTripleValueInDB(requestedLeaf.getPath(), offeredLeaf.getPath())));
-        return new Transaction(0, applicantName, applicantDistrict, requestedLeaf.getPath(),
+        return new Transaction(generateID(), applicantName, applicantDistrict, requestedLeaf.getPath(),
                 offeredLeaf.getPath(), requestedHours, offeredHours, TransactionStatus.OPEN, null);
     }
 
@@ -311,4 +303,7 @@ public class Model {
     }
 
 
+    public Transactions getTransactions() {
+        return transactions;
+    }
 }

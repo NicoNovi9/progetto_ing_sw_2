@@ -48,7 +48,6 @@ public class ControllerUser extends BaseController {
     //               belongs of a closed set
     public void addTransaction(Transaction t) {
         model.addTransaction(t);
-
     }
 
 

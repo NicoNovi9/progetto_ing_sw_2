@@ -301,6 +301,7 @@ public class ViewConfigurator extends BaseView {
         String path = scanner.nextLine();
         System.out.print("Inserisci fattore di conversione: ");
         double factor = scanner.nextDouble();
+        scanner.nextLine();
 
         try {
             switch (controllerConfigurator.addLeaf(name, description, parent, factor, path)) {
