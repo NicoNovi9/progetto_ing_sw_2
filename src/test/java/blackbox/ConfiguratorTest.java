@@ -21,6 +21,8 @@ public class ConfiguratorTest {
     public ControllerConfigurator controllerConfigurator;
     public Node rootNode;
 
+    // *****************************************************************************************************
+    // SETUP AMBIENTE PER IL TEST BLACKBOX
     @BeforeEach
     public void setUp() {
 
@@ -49,6 +51,7 @@ public class ConfiguratorTest {
             }
         }
     }
+    //***********************************************************************************************
 
     @Test
     void testConversionFactors() throws LeafException {

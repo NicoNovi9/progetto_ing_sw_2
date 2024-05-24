@@ -29,6 +29,9 @@ public class TransactionsTest {
     public ControllerUser controllerUser;
     public Model model;
 
+    // *****************************************************************************************************
+    // SETUP AMBIENTE PER IL TEST BLACKBOX
+
     @BeforeEach
     public void setUp() throws LeafException {
 
@@ -79,6 +82,8 @@ public class TransactionsTest {
         }
     }
 
+    //********************************************************************************************************
+
     @Test
     void testAddTransaction(){
         // con la view è guidato nella selezione del nodo
@@ -102,12 +107,84 @@ public class TransactionsTest {
                 t.offeredHours());
         Assertions.assertEquals(TransactionStatus.OPEN,t.status());
 
+    }
+
+    @Test
+    void testClosedTransactions4Cicle(){
+        // con la view l'utente è guidato nella selezione del nodo
+        // per i test vado a prendere i nodi "manualemente" dalla radice
+        Node n1 = controllerConfigurator.getRootArray().get(0).getChildren().get(0).getChildren().get(0);
+        Node n2 = controllerConfigurator.getRootArray().get(0).getChildren().get(0).getChildren().get(1);
+        Node n3 = controllerConfigurator.getRootArray().get(0).getChildren().get(0).getChildren().get(2);
+        Node n4 = controllerConfigurator.getRootArray().get(0).getChildren().get(0).getChildren().get(3);
+
+        controllerUser.setCurrentUser("test1");
+        Transaction t = controllerUser.createNewTransaction(n2, n1, 10);
+        controllerUser.addTransaction(t);
+
         controllerUser.setCurrentUser("test2");
-        Transaction t1 = controllerUser.createNewTransaction(n1, n2, t.offeredHours());
+        Transaction t1 = controllerUser.createNewTransaction(n3, n2, 8);
         controllerUser.addTransaction(t1);
 
-        // numeor di transizioni chiuse
-        Assertions.assertEquals(2, controllerConfigurator.getTransactionsByStatus(TransactionStatus.CLOSED).size());
+        controllerUser.setCurrentUser("test3");
+        Transaction t2 = controllerUser.createNewTransaction(n4, n3, 7);
+        controllerUser.addTransaction(t2);
+
+        controllerUser.setCurrentUser("test1");
+        Transaction t3 = controllerUser.createNewTransaction(n1, n4, 7);
+        controllerUser.addTransaction(t3);
+
+        // transazione non nel ciclo
+        controllerUser.setCurrentUser("test1");
+        Transaction t4 = controllerUser.createNewTransaction(n1, n4, 7);
+        controllerUser.addTransaction(t4);
+
+        // numero di transizioni chiuse
+        Assertions.assertEquals(4, controllerConfigurator.getTransactionsByStatus(TransactionStatus.CLOSED).size());
+
+        // numero di transazioni aperte
+        Assertions.assertEquals(1, controllerConfigurator.getTransactionsByStatus(TransactionStatus.OPEN).size());
+
+    }
+
+    @Test
+    void testCicleNotClosedBecauseDifferentDistrict(){
+        // con la view l'utente è guidato nella selezione del nodo
+        // per i test vado a prendere i nodi "manualemente" dalla radice
+        Node n1 = controllerConfigurator.getRootArray().get(0).getChildren().get(0).getChildren().get(0);
+        Node n2 = controllerConfigurator.getRootArray().get(0).getChildren().get(0).getChildren().get(1);
+        Node n3 = controllerConfigurator.getRootArray().get(0).getChildren().get(0).getChildren().get(2);
+        Node n4 = controllerConfigurator.getRootArray().get(0).getChildren().get(0).getChildren().get(3);
+
+        controllerUser.setCurrentUser("test1");
+        Transaction t = controllerUser.createNewTransaction(n2, n1, 10);
+        controllerUser.addTransaction(t);
+
+        controllerUser.setCurrentUser("test2");
+        Transaction t1 = controllerUser.createNewTransaction(n3, n2, 8);
+        controllerUser.addTransaction(t1);
+
+        // l'utente "test4" è di un distretto differente rispetto a 1 e 2
+        controllerUser.setCurrentUser("test4");
+        Transaction t2 = controllerUser.createNewTransaction(n1, n3, 7);
+        controllerUser.addTransaction(t2);
+
+        // numero di transizioni chiuse
+        Assertions.assertEquals(0, controllerConfigurator.getTransactionsByStatus(TransactionStatus.CLOSED).size());
+
+        // numero di transazioni aperte
+        Assertions.assertEquals(3, controllerConfigurator.getTransactionsByStatus(TransactionStatus.OPEN).size());
+
+        // l'offerta di di test3 chiude il ciclo di 3 transazioni e rimane aperta l'offerta di 4
+        controllerUser.setCurrentUser("test3");
+        Transaction t3 = controllerUser.createNewTransaction(n1, n3, 7);
+        controllerUser.addTransaction(t3);
+
+        // numero di transizioni chiuse
+        Assertions.assertEquals(3, controllerConfigurator.getTransactionsByStatus(TransactionStatus.CLOSED).size());
+
+        // numero di transazioni aperte
+        Assertions.assertEquals(1, controllerConfigurator.getTransactionsByStatus(TransactionStatus.OPEN).size());
 
     }
 

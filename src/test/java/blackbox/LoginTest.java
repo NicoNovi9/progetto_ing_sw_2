@@ -20,7 +20,8 @@ public class LoginTest {
     public static String RESOURCES_PATH = "src/test/java/blackbox/resources/resources_path_test.txt";
     InterfaceDatabase db;
 
-
+    // *****************************************************************************************************
+    // SETUP AMBIENTE PER IL TEST BLACKBOX
     @BeforeEach
     public void setUp() {
 
@@ -55,6 +56,7 @@ public class LoginTest {
             }
         }
     }
+    //***********************************************************************************************+
 
     @Test
     void testFirstLoginCorrect() {
