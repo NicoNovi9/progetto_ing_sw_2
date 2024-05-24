@@ -62,7 +62,6 @@ public class ControllerConfigurator extends BaseController {
 
     }
 
-
     public User searchUser(String name) {
         return model.searchUser(name);
     }
