@@ -7,14 +7,13 @@ import returnStatus.TransactionStatus;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class Model {
     public static final double LAMBDA = 0.001;
     private Node rootNode;
     private ConversionFactors conversionFactors;
     private Districts districts;
-    private TransactionManager transactionManager;
+    private final TransactionManager transactionManager;
     InterfaceDatabase database;
 
     public Model(InterfaceDatabase database) {
@@ -51,7 +50,7 @@ public class Model {
         String currentPath = parents.getPath().toLowerCase() + "-" + name.toLowerCase();
 
         if (!factorsIsEmpty()) { // necessario dato che la prima volta factor e conversionPath saranno null
-            if (factor == null){
+            if (factor == null) {
                 return AddLeafStatus.INVALID_CONVERSION_FACTOR;
             }
             if (factor <= (0.5 - LAMBDA) || factor >= (2.0 + LAMBDA))

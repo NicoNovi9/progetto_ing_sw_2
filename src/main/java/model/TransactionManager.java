@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class TransactionManager {
     private Transactions transactions;
-    private GraphManager graphManager;
+    private final GraphManager graphManager;
 
     public TransactionManager() {
         this.graphManager = new GraphManager();
@@ -21,10 +21,10 @@ public class TransactionManager {
 
     }
 
-    private boolean resolveTransaction(int transaction, List<Integer> possibiliOfferte) {
+    private void resolveTransaction(int transaction, List<Integer> possibiliOfferte) {
         List<Integer> closedTransaction = graphManager.findClosedPath(possibiliOfferte, transaction);
         if (closedTransaction.isEmpty())
-            return false;
+            return;
         graphManager.removeNodes(closedTransaction);
         //questo ciclo for ha senso solo se dentro il closedTransaction i numeri hanno un ordine(da controllare)
         for (int i = 0; i < closedTransaction.size(); i++) {
@@ -36,7 +36,6 @@ public class TransactionManager {
             else id2 = closedTransaction.get(i + 1);
             changeTransactionCloser(transactions.getTransaction(id), transactions.getTransaction(id2).applicantName());
         }
-        return true;
 
     }
 
