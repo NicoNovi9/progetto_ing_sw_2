@@ -1,4 +1,4 @@
-package requirements;
+package blackbox;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
@@ -17,10 +17,11 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 public class LoginTest {
-    public static String RESOURCES_PATH = "src/test/java/requirements/resources/resources_path_test.txt";
+    public static String RESOURCES_PATH = "src/test/java/blackbox/resources/resources_path_test.txt";
     InterfaceDatabase db;
 
-
+    // *****************************************************************************************************
+    // SETUP AMBIENTE PER IL TEST BLACKBOX
     @BeforeEach
     public void setUp() {
 
@@ -29,9 +30,9 @@ public class LoginTest {
         // Copio il file con le credenziali di deafult di test (permanente)
         // nel file usato per il test (così da averlo sempre pulito ad ogni test)
         Path sourcePath = Paths.get("src/test/resources/default_test.csv");
-        Path destinationPath = Paths.get("src/test/java/requirements/resources/default_test.csv");
+        Path destinationPath = Paths.get("src/test/java/blackbox/resources/default_test.csv");
         Path sourcePath1 = Paths.get("src/test/resources/credentials_test.csv");
-        Path destinationPath1 = Paths.get("src/test/java/requirements/resources/credentials_test.csv");
+        Path destinationPath1 = Paths.get("src/test/java/blackbox/resources/credentials_test.csv");
 
         try {
             Files.copy(sourcePath, destinationPath, StandardCopyOption.REPLACE_EXISTING);
@@ -55,6 +56,7 @@ public class LoginTest {
             }
         }
     }
+    //***********************************************************************************************+
 
     @Test
     void testFirstLoginCorrect() {

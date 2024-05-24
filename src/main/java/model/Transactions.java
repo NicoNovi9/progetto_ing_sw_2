@@ -80,14 +80,6 @@ public class Transactions {
         return temp;
     }
 
-
-    public Transaction assignTransactionId(Transaction t, int id) {
-        Transaction updateT = new Transaction(id, t.applicantName(), t.district(),
-                t.requestedLeaf(), t.offeredLeaf(), t.requestedHours(), t.offeredHours(),
-                t.status(), t.closerName());
-        return updateT;
-    }
-
     public Transaction getTransaction(int id) {
         return transactions.get(id);
     }

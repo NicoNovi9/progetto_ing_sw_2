@@ -1,7 +1,0 @@
-src/test/java/requirements/resources/conversion_test.csv
-src/test/java/requirements/resources/districts_test.csv
-src/test/java/requirements/resources/tree.json
-src/test/java/requirements/resources/default_test.csv
-src/test/java/requirements/resources/credentials_test.csv
-src/test/java/requirements/resources/transactions_test.csv
-src/test/java/requirements/resources/id_test.txt
