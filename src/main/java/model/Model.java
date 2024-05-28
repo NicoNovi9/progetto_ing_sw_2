@@ -1,6 +1,6 @@
 package model;
 
-import repository.InterfaceDatabase;
+import interfaceRepository.InterfaceDatabase;
 import returnStatus.AddLeafStatus;
 import returnStatus.DatabaseStatus;
 import returnStatus.TransactionStatus;

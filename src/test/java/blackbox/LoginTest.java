@@ -4,7 +4,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import repository.InterfaceDatabase;
+import interfaceRepository.InterfaceDatabase;
 import repository.LocalDatabase;
 
 import java.io.BufferedReader;

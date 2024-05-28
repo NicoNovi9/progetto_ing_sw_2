@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
+import interfaceRepository.InterfaceDatabase;
 import model.*;
 import returnStatus.DatabaseStatus;
 import returnStatus.TransactionStatus;
