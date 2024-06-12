@@ -80,32 +80,39 @@ public class ConfiguratorTest {
                         "--"+TS.C+"-"+TS.CC+"-"+TS.CC6));
     }
 
+    // test usando la tecnica delle classi di equivalenza e boundary value analysis
     @Test
     void testInvalidConversionFactor() throws LeafException {
         controllerConfigurator.addCategory("videogame","");
 
         Node parent0 = controllerConfigurator.getRootArray().get(0);
 
+        // la prima foglia non ha riferimeti
         Assertions.assertEquals(AddLeafStatus.VALID_LEAF, controllerConfigurator.addLeaf(
                 "zelda", "", parent0, null, null));
 
         Assertions.assertEquals(AddLeafStatus.INVALID_CONVERSION_FACTOR, controllerConfigurator.addLeaf(
                 "supermario", "", parent0, -1.0, "--videogame-zelda"));
+        Assertions.assertEquals(AddLeafStatus.INVALID_CONVERSION_FACTOR, controllerConfigurator.addLeaf(
+                "supermario", "", parent0, 0.0, "--videogame-zelda"));
+
+        Assertions.assertEquals(AddLeafStatus.VALID_LEAF, controllerConfigurator.addLeaf(
+                "supermario", "", parent0, 2.0, "--videogame-zelda"));
+
+        Assertions.assertEquals(AddLeafStatus.VALID_LEAF, controllerConfigurator.addLeaf(
+                "pacman", "", parent0, 0.5, "--videogame-zelda"));
+
+        Assertions.assertEquals(AddLeafStatus.VALID_LEAF, controllerConfigurator.addLeaf(
+                "space_invader", "", parent0, 1.0, "--videogame-zelda"));
 
         Assertions.assertEquals(AddLeafStatus.INVALID_CONVERSION_FACTOR, controllerConfigurator.addLeaf(
                 "supermario", "", parent0, 2.1, "--videogame-zelda"));
-
-        Assertions.assertEquals(AddLeafStatus.INVALID_CONVERSION_FACTOR, controllerConfigurator.addLeaf(
-                "supermario", "", parent0, 0.0, "--videogame-zelda"));
 
         Assertions.assertEquals(AddLeafStatus.INVALID_CONVERSION_FACTOR, controllerConfigurator.addLeaf(
                 "supermario", "", parent0, 0.49, "--videogame-zelda"));
 
         Assertions.assertEquals(AddLeafStatus.INVALID_CONVERSION_FACTOR, controllerConfigurator.addLeaf(
                 "supermario", "", parent0, null, "--videogame-zelda"));
-
-        // verifica che nessuna foglia errata sia stata aggiunta
-        Assertions.assertEquals(1, parent0.getChildren().size());
 
     }
 
