@@ -23,7 +23,6 @@ public class Model {
         this.database = database;
     }
 
-
     public boolean addCategory(String name, String description) {
         for (Node n : rootNode.getChildren()) {
             if (n.getName().equals(name))
