@@ -21,7 +21,48 @@ public class AuthenticatorDB {
         this.csvPersonalFilePath = csvPersonalFilePath;
     }
 
-    public String getPasswordFromName(String csvFile, String name) {
+    public boolean isFirstLogin(String username, String password, String tag) {
+        return isNamePresent(csvDefaultFilePath, username) &&
+                getPasswordFromName(csvDefaultFilePath, username).equals(password) &&
+                getTagFromName(csvDefaultFilePath, username).equals(tag);
+    }
+
+    public boolean firstLogin(
+            String username, String password, String newUsername, String newPassword,
+            String email, String district, String tag) {
+        if (isNamePresent(csvPersonalFilePath, newUsername))
+            return false;
+        if (isFirstLogin(username, password, tag)) {
+            addCredentialToCSV(newUsername, newPassword, email, district, tag, csvPersonalFilePath);
+            removeRecordFromCSV(username, csvDefaultFilePath);
+            return true;
+        } else
+            return false;
+    }
+
+    public boolean login(String username, String password, String tag) {
+        return isNamePresent(csvPersonalFilePath, username)
+                && getPasswordFromName(csvPersonalFilePath, username).equals(password)
+                && getTagFromName(csvPersonalFilePath, username).equals(tag);
+    }
+
+    public User getUser(String searchString) {
+        try (CSVReader reader = new CSVReader(new FileReader(csvPersonalFilePath))) {
+            String[] line;
+            while ((line = reader.readNext()) != null) {
+                if (line[0].equals(searchString)) {
+                    if (line.length >= 4) {
+                        return new User(line[0], line[2], line[3]);
+                    }
+                }
+            }
+        } catch (IOException | CsvValidationException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private String getPasswordFromName(String csvFile, String name) {
         String password = null;
 
         try (CSVReader reader = new CSVReader(new FileReader(csvFile))) {
@@ -39,7 +80,7 @@ public class AuthenticatorDB {
         return password;
     }
 
-    public String getTagFromName(String csvFile, String name) {
+    private String getTagFromName(String csvFile, String name) {
         String tag = null;
 
         try (CSVReader reader = new CSVReader(new FileReader(csvFile))) {
@@ -57,8 +98,7 @@ public class AuthenticatorDB {
         return tag;
     }
 
-    // Metodo per verificare se il nome è presente nel file CSV
-    public boolean isNamePresent(String csvFile, String name) {
+    private boolean isNamePresent(String csvFile, String name) {
         boolean isPresent = false;
 
         try (CSVReader reader = new CSVReader(new FileReader(csvFile))) {
@@ -76,8 +116,7 @@ public class AuthenticatorDB {
         return isPresent;
     }
 
-    // Metodo per rimuovere un record dal file CSV
-    public void removeRecordFromCSV(String username, String csvFilePath) {
+    private void removeRecordFromCSV(String username, String csvFilePath) {
         List<String[]> newRows = new ArrayList<>();
         try (CSVReader reader = new CSVReader(new FileReader(csvFilePath))) {
             String[] nextRecord;
@@ -99,7 +138,7 @@ public class AuthenticatorDB {
 
     }
 
-    public void addCredentialToCSV(String username, String password, String email, String district, String tag, String csvFilePath) {
+    private void addCredentialToCSV(String username, String password, String email, String district, String tag, String csvFilePath) {
         try (CSVWriter writer = new CSVWriter(new FileWriter(csvFilePath, true))) {
             String[] record = {username, password, email, district, tag};
             writer.writeNext(record);
@@ -108,49 +147,6 @@ public class AuthenticatorDB {
         }
     }
 
-    public boolean isFirstLogin(String username, String password, String tag) {
-        return isNamePresent(csvDefaultFilePath, username) &&
-                getPasswordFromName(csvDefaultFilePath, username).equals(password) &&
-                getTagFromName(csvDefaultFilePath, username).equals(tag);
-    }
-
-    // Method to handle the first login with default credentials and setting up personal credentials
-    public boolean firstLogin(
-            String username, String password, String newUsername, String newPassword,
-            String email, String district, String tag) {
-        if (isNamePresent(csvPersonalFilePath, newUsername))
-            return false;
-        if (isFirstLogin(username, password, tag)) {
-            addCredentialToCSV(newUsername, newPassword, email, district, tag, csvPersonalFilePath);
-            removeRecordFromCSV(username, csvDefaultFilePath);
-            return true;
-        } else
-            return false;
-    }
-
-    // Method to perform subsequent logins using personal credentials
-    public boolean login(String username, String password, String tag) {
-        return isNamePresent(csvPersonalFilePath, username)
-                && getPasswordFromName(csvPersonalFilePath, username).equals(password)
-                && getTagFromName(csvPersonalFilePath, username).equals(tag);
-    }
-
-
-    public User getUser(String searchString) {
-        try (CSVReader reader = new CSVReader(new FileReader(csvPersonalFilePath))) {
-            String[] line;
-            while ((line = reader.readNext()) != null) {
-                if (line[0].equals(searchString)) {
-                    if (line.length >= 4) {
-                        return new User(line[0], line[2], line[3]);
-                    }
-                }
-            }
-        } catch (IOException | CsvValidationException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 }
 
 
