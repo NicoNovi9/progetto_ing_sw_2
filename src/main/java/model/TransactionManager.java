@@ -8,10 +8,10 @@ import java.util.Map;
 
 public class TransactionManager {
     private Transactions transactions;
-    private final GraphManager graphManager;
+    private final Graph graphManager;
 
     public TransactionManager() {
-        this.graphManager = new GraphManager();
+        this.graphManager = new Graph();
     }
 
     public void loadTransactionsManager(Transactions transactions) {
@@ -62,7 +62,7 @@ public class TransactionManager {
     }
 
     private void resolveTransaction(int transaction, List<Integer> possibiliOfferte) {
-        List<Integer> closedTransaction = graphManager.findClosedPath(possibiliOfferte, transaction);
+        List<Integer> closedTransaction = graphManager.findClosedPath( transaction);
         if (closedTransaction.isEmpty())
             return;
         graphManager.removeNodes(closedTransaction);
