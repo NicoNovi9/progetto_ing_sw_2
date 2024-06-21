@@ -5,10 +5,12 @@ import java.util.ArrayList;
 public class ConversionFactors {
     private final ArrayList<Factor> factors;
     boolean initialized;
+    private int cont;
 
     public ConversionFactors() {
         factors = new ArrayList<>();
         initialized = false;
+        cont=0;
     }
 
     public void addFirstFactor(String id) {
@@ -26,7 +28,7 @@ public class ConversionFactors {
             ArrayList<Factor> newFactors = new ArrayList<>();
 
             for (Factor f1 : factors) {
-
+                cont++;
                 if (f1.third().equals(id2) && !f1.first().equals(id1)) {
                     double newFactor = roundTo2Decimal(1 / f1.second() * (factor));
                     newFactors.add(new Factor(id1, newFactor, f1.first()));
@@ -34,8 +36,9 @@ public class ConversionFactors {
                 } else if (f1.first().equals(id2)) {
                     double newFactor = roundTo2Decimal(f1.second() * factor);
                     newFactors.add(new Factor(id1, newFactor, f1.third()));
-
+                    System.out.println(2);
                 }
+                else;
             }
             factors.addAll(newFactors);
         }
@@ -75,5 +78,17 @@ public class ConversionFactors {
 
     public boolean isEmpty() {
         return factors.isEmpty();
+    }
+
+    public boolean isInitialized() {
+        return initialized;
+    }
+
+    public void inverInitialized() {
+        this.initialized = !this.initialized;
+    }
+
+    public int getCont() {
+        return cont;
     }
 }
