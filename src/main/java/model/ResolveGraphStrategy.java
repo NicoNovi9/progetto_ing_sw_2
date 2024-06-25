@@ -3,5 +3,5 @@ package model;
 import java.util.List;
 
 public interface ResolveGraphStrategy {
-   public  List resolve(Graph graph, int startNode);
+   public  List resolve(GraphManager graphManager, int startNode);
 }

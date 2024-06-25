@@ -7,7 +7,7 @@ public class ResolveGraphContext {
     public void setStrategy(ResolveGraphStrategy strategy){
         this.strategy=strategy;
     }
-    public List<Integer> resolve(Graph graph, int startNode){
-        return strategy.resolve(graph, startNode);
+    public List<Integer> resolve(GraphManager graphManager, int startNode){
+        return strategy.resolve(graphManager, startNode);
     }
 }

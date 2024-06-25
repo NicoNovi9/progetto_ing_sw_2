@@ -8,10 +8,10 @@ import java.util.Map;
 
 public class TransactionManager {
     private Transactions transactions;
-    private final Graph graphManager;
+    private final GraphManager graphManager;
 
     public TransactionManager() {
-        this.graphManager = new Graph();
+        this.graphManager = new GraphManager();
     }
 
     public void loadTransactionsManager(Transactions transactions) {
@@ -104,6 +104,15 @@ public class TransactionManager {
         return transactions.searchByApplicant(name);
     }
 
+    public void retireTransaction(Transaction t ){
+        retireTransactionFromGraph(t);
+        changeTransactionStatus(t, TransactionStatus.RETIRED);
+    }
+    public void retireTransactionFromGraph(Transaction t){
+        List<Integer> retiredTransaction = new ArrayList<>();
+        retiredTransaction.add(t.id());
+        graphManager.removeNodes(retiredTransaction);
+    }
     public void changeTransactionStatus(Transaction t, TransactionStatus status) {
         transactions.updateTransactionStatus(t.id(), status);
     }

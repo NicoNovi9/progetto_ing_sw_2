@@ -8,26 +8,28 @@ import java.util.Map;
 public class FindLonghestPath implements ResolveGraphStrategy {
 
     List<List<Integer>> foundPaths;
+    GraphManager graphManager;
 
 
     public FindLonghestPath() {
         this.foundPaths = new ArrayList<>();
+
     }
 
     @Override
-    public  List resolve(Graph graph, int startNode ) {
-        List<Integer> endNodes =searchValue(graph, startNode);
-        findClosedPath(graph, endNodes, startNode);
+    public  List<Integer> resolve(GraphManager graphManager, int startNode ) {
+        this.graphManager = graphManager;
+        List<Integer> endNodes =searchValue(startNode);
+       return findClosedPath( endNodes, startNode);
 
-        return null;
     }
-    public List<Integer> findClosedPath(Graph graph, List<Integer> nodiDiArrivo, int startingNode) {
+    public List<Integer> findClosedPath( List<Integer> nodiDiArrivo, int startingNode) {
 
         foundPaths.clear();
         List<Integer> longhestPath = new ArrayList<>();
 
         for (int node : nodiDiArrivo) {
-            findPaths(graph, startingNode, node);
+            findPaths( startingNode, node);
         }
         for (List<Integer> p : foundPaths) {
             if (p.size() > longhestPath.size())
@@ -36,10 +38,10 @@ public class FindLonghestPath implements ResolveGraphStrategy {
         return longhestPath;
 
     }
-    private void findPaths(Graph graph, int source, int destination) {
+    private void findPaths( int source, int destination) {
         Map<Integer, Boolean> visited = new HashMap<>();
 
-        for (Map.Entry<Integer, List<Integer>> entry : graph.getGraph().entrySet()) {
+        for (Map.Entry<Integer, List<Integer>> entry : graphManager.getGraph().entrySet()) {
             int temp = entry.getKey();
             if (!visited.containsKey(temp))
                 visited.put(temp, false);
@@ -50,11 +52,11 @@ public class FindLonghestPath implements ResolveGraphStrategy {
 
         List<Integer> currentPath = new ArrayList<>();
         currentPath.add(source);
-        findPathsUtil(graph, source, destination, visited, currentPath);
+        findPathsUtil( source, destination, visited, currentPath);
     }
-    public List<Integer> searchValue(Graph graph, int value) {
+    public List<Integer> searchValue( int value) {
         List<Integer> foundKeys = new ArrayList<>();
-        for (Map.Entry<Integer, List<Integer>> entry :  graph.getGraph().entrySet()) {
+        for (Map.Entry<Integer, List<Integer>> entry :  graphManager.getGraph().entrySet()) {
             int key = entry.getKey();
             List<Integer> values = entry.getValue();
             if (values.contains(value)) {
@@ -64,17 +66,17 @@ public class FindLonghestPath implements ResolveGraphStrategy {
 
         return foundKeys;
     }
-    private void findPathsUtil(Graph graph,int u, int destination, Map<Integer, Boolean> visited, List<Integer> currentPath) {
+    private void findPathsUtil(int u, int destination, Map<Integer, Boolean> visited, List<Integer> currentPath) {
         visited.replace(u, true);
 
 
         if (u == destination) {
             updateAllPathFound(currentPath);
         } else {
-            for (Integer i : graph.getAdjacent(u)) {
+            for (Integer i : graphManager.getAdjacent(u)) {
                 if (!visited.get(i)) {
                     currentPath.add(i);
-                    findPathsUtil(graph, i, destination, visited, currentPath);
+                    findPathsUtil( i, destination, visited, currentPath);
                     currentPath.remove(currentPath.size() - 1);
                 }
             }

@@ -3,7 +3,7 @@ package model;
 
 import java.util.*;
 
-public class Graph {
+public class GraphManager {
 
     List<List<Integer>> foundPaths;
     ResolveGraphContext resolveGraphCtx;
@@ -14,7 +14,7 @@ public class Graph {
         return graph;
     }
 
-    public Graph() {
+    public GraphManager() {
         graph = new HashMap<>();
         foundPaths = new ArrayList<>();
         resolveGraphCtx= new ResolveGraphContext();

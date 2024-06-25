@@ -50,6 +50,12 @@ public class ControllerUser extends BaseController {
         model.addTransaction(t);
     }
 
+    //precondition: Not Null Transaction
+    //postcondition: existing transaction status is changed from "OPEN" to the "RETIRED",
+    //               the graph is updated
+    public void retireTransaction(Transaction t){
+        model.retireTransaction(t);}
+
 
     public List<Transaction> getTransactionByApplicant() {
         return model.searchByApplicant(currentUser.name());
