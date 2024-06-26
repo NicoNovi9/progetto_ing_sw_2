@@ -62,7 +62,7 @@ public class TransactionManager {
     }
 
     private void resolveTransaction(int transaction, List<Integer> possibiliOfferte) {
-        List<Integer> closedTransaction = graphManager.findClosedPath(possibiliOfferte, transaction);
+        List<Integer> closedTransaction = graphManager.findClosedPath( transaction);
         if (closedTransaction.isEmpty())
             return;
         graphManager.removeNodes(closedTransaction);
@@ -104,6 +104,15 @@ public class TransactionManager {
         return transactions.searchByApplicant(name);
     }
 
+    public void retireTransaction(Transaction t ){
+        retireTransactionFromGraph(t);
+        changeTransactionStatus(t, TransactionStatus.RETIRED);
+    }
+    public void retireTransactionFromGraph(Transaction t){
+        List<Integer> retiredTransaction = new ArrayList<>();
+        retiredTransaction.add(t.id());
+        graphManager.removeNodes(retiredTransaction);
+    }
     public void changeTransactionStatus(Transaction t, TransactionStatus status) {
         transactions.updateTransactionStatus(t.id(), status);
     }

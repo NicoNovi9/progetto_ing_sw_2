@@ -205,7 +205,7 @@ public class Model {
     public void addTransaction(Transaction t) {
         transactionManager.addTransaction(t);
     }
-
+    public void retireTransaction(Transaction t){transactionManager.retireTransaction(t);}
     public List<Transaction> searchByStatus(TransactionStatus status) {
         return transactionManager.searchByStatus(status);
     }

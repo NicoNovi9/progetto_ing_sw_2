@@ -94,7 +94,7 @@ public class ViewUser extends BaseView {
         } while (!fine);
         if (i == 1) {
             System.out.println("la transazione è stata ritirata");
-            controllerUser.changeTransactionStatus(t, TransactionStatus.RETIRED);
+            controllerUser.retireTransaction(t);
         } else System.out.println("operazione annullata");
 
     }
@@ -111,8 +111,9 @@ public class ViewUser extends BaseView {
             int index = scanner.nextInt();
             treeTravel(controllerUser.getNodeFromIndex(index));
         } catch (Exception e) {
-            System.out.println(FORMATO_NON_VALIDO);
-        }
+           System.out.println(FORMATO_NON_VALIDO);
+          }
+
         scanner.nextLine();
     }
 
