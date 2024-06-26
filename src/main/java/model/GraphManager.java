@@ -17,7 +17,7 @@ public class GraphManager {
     public GraphManager() {
         graph = new HashMap<>();
         foundPaths = new ArrayList<>();
-        resolveGraphCtx= new ResolveGraphContext();
+        resolveGraphCtx = new ResolveGraphContext();
         resolveGraphCtx.setStrategy(new FindLonghestPath());
     }
 
@@ -30,10 +30,11 @@ public class GraphManager {
 
         return graph.getOrDefault(nodo, new LinkedList<>());
     }
-    public List<Integer> findClosedPath(int startingNode)
-    {
+
+    public List<Integer> findClosedPath(int startingNode) {
         return resolveGraphCtx.resolve(this, startingNode);
     }
+
     //usage only for tests
     public void printGraph() {
         for (Map.Entry<Integer, List<Integer>> entry : graph.entrySet()) {
@@ -46,6 +47,7 @@ public class GraphManager {
             System.out.println();
         }
     }
+
     public void removeNodes(List<Integer> toRemoveNodes) {
         for (int node : toRemoveNodes) {
             graph.remove(node);

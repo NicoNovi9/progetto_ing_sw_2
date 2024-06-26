@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Districts {
-    private Set<String> districts;
+    private final Set<String> districts;
 
     public Districts() {
         districts = new HashSet<>();

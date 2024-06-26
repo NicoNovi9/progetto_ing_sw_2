@@ -38,19 +38,19 @@ public class TS {
         controllerConfigurator.addLeaf(
                 AA0, "", parent0, null, null);
         controllerConfigurator.addLeaf(
-                AA1, "", parent0, 0.55, "--"+A+"-"+AA+"-"+AA0);
+                AA1, "", parent0, 0.55, "--" + A + "-" + AA + "-" + AA0);
         controllerConfigurator.addLeaf(
-                AA2, "", parent0, 1.5, "--"+A+"-"+AA+"-"+AA1);
+                AA2, "", parent0, 1.5, "--" + A + "-" + AA + "-" + AA1);
         controllerConfigurator.addLeaf(
-                AA3, "", parent0, 0.7, "--"+A+"-"+AA+"-"+AA0);
+                AA3, "", parent0, 0.7, "--" + A + "-" + AA + "-" + AA0);
         controllerConfigurator.addLeaf(
-                BB4, "", parent1, 1.2, "--"+A+"-"+AA+"-"+AA0);
+                BB4, "", parent1, 1.2, "--" + A + "-" + AA + "-" + AA0);
         controllerConfigurator.addLeaf(
-                CC5, "", parent2, 0.5, "--"+B+"-"+BB+"-"+BB4);
+                CC5, "", parent2, 0.5, "--" + B + "-" + BB + "-" + BB4);
         controllerConfigurator.addLeaf(
-                CC6, "", parent2, 0.53, "--"+C+"-"+CC+"-"+CC5);
+                CC6, "", parent2, 0.53, "--" + C + "-" + CC + "-" + CC5);
         controllerConfigurator.addLeaf(
-                CC7, "", parent2, 1.5, "--"+C+"-"+CC+"-"+CC6);
+                CC7, "", parent2, 1.5, "--" + C + "-" + CC + "-" + CC6);
 
     }
 }
