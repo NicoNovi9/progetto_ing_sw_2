@@ -16,7 +16,7 @@ public class AddFactorTest {
         }
 
         @Test
-        void testAddFactor_SingleFactor() {
+        void testAddFactor_SingleFactor() { //test per inserire il primo fattore e inizializzare
 
             testClass.addFirstFactor("id1");
             testClass.addFactor("id1", 2.0, "id2");
@@ -26,9 +26,9 @@ public class AddFactorTest {
             assertEquals(new Factor("id2", roundTo2Decimal(0.5), "id1"), testClass.getFactors().get(0));
         }
          @Test
-        void testAddFactor_2Factors() {
+        void testAddFactor_2Factors() { //test per passare dal ciclo for e primo if
 
-            testClass.getFactors().add(new Factor("id2", roundTo2Decimal(roundTo2Decimal(1 / 2.0)), "id1"));
+            testClass.getFactors().add(new Factor("id2", roundTo2Decimal(1 / 2.0), "id1"));
             testClass.inverInitialized();
 
             testClass.addFactor("id3", 0.5, "id1");
@@ -39,9 +39,9 @@ public class AddFactorTest {
             assertTrue(testClass.getFactors().contains(new Factor("id3", roundTo2Decimal(1.0), "id2")));
         }
         @Test
-        void testAddFactor_2Factors2() {
+        void testAddFactor_2Factors2() { //test per passare dal ciclo for ed else if
 
-            testClass.getFactors().add(new Factor("id2", roundTo2Decimal(roundTo2Decimal(1 / 2.0)), "id1"));
+            testClass.getFactors().add(new Factor("id2", roundTo2Decimal(1 / 2.0), "id1"));
             testClass.inverInitialized();
 
             testClass.addFactor("id3", 0.5, "id2");
@@ -54,9 +54,9 @@ public class AddFactorTest {
 
 
        @Test
-        void testAddFactor_3Factors() {
+        void testAddFactor_3Factors() { //test multiplo del for
 
-            testClass.getFactors().add(new Factor("id2", roundTo2Decimal(roundTo2Decimal(1 / 2.0)), "id1"));
+            testClass.getFactors().add(new Factor("id2", roundTo2Decimal(1 / 2.0), "id1"));
             testClass.getFactors().add(new Factor("id3", roundTo2Decimal(0.5), "id1"));
             testClass.getFactors().add(new Factor("id3", roundTo2Decimal(1.0), "id2"));
             testClass.inverInitialized();
