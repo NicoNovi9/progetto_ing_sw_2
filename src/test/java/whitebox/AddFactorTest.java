@@ -16,7 +16,7 @@ public class AddFactorTest {
         }
 
         @Test
-        void testAddFactor_SingleFactor() { //path coverage primo if
+        void testAddFactor_SingleFactor() {
 
             testClass.addFirstFactor("id1");
             testClass.addFactor("id1", 2.0, "id2");
@@ -26,7 +26,7 @@ public class AddFactorTest {
             assertEquals(new Factor("id2", roundTo2Decimal(0.5), "id1"), testClass.getFactors().get(0));
         }
          @Test
-        void testAddFactor_2Factors() { // primo path coverage else
+        void testAddFactor_2Factors() {
 
             testClass.getFactors().add(new Factor("id2", roundTo2Decimal(roundTo2Decimal(1 / 2.0)), "id1"));
             testClass.inverInitialized();
@@ -39,7 +39,7 @@ public class AddFactorTest {
             assertTrue(testClass.getFactors().contains(new Factor("id3", roundTo2Decimal(1.0), "id2")));
         }
         @Test
-        void testAddFactor_2Factors2() { //secondo path coverage else
+        void testAddFactor_2Factors2() {
 
             testClass.getFactors().add(new Factor("id2", roundTo2Decimal(roundTo2Decimal(1 / 2.0)), "id1"));
             testClass.inverInitialized();
