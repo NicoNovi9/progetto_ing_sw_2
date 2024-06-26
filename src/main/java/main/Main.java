@@ -2,10 +2,10 @@ package main;
 
 import controller.ControllerConfigurator;
 import controller.ControllerUser;
+import interfaceRepository.InterfaceDatabase;
 import model.LeafException;
 import model.Model;
 import model.Node;
-import interfaceRepository.InterfaceDatabase;
 import repository.LocalDatabase;
 import view.StartView;
 

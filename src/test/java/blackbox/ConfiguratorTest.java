@@ -1,6 +1,8 @@
 package blackbox;
 
 import controller.ControllerConfigurator;
+import interfaceRepository.InterfaceDatabase;
+import model.ConversionFactors;
 import model.LeafException;
 import model.Model;
 import model.Node;
@@ -8,12 +10,13 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import interfaceRepository.InterfaceDatabase;
 import repository.LocalDatabase;
-import model.ConversionFactors;
 import returnStatus.AddLeafStatus;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class ConfiguratorTest {
 
@@ -62,28 +65,28 @@ public class ConfiguratorTest {
 
         Assertions.assertEquals(
                 0.55,
-                conversionFactors.findTripleValue("--"+TS.A+"-"+TS.AA+"-"+TS.AA1,
-                        "--"+TS.A+"-"+TS.AA+"-"+TS.AA0));
+                conversionFactors.findTripleValue("--" + TS.A + "-" + TS.AA + "-" + TS.AA1,
+                        "--" + TS.A + "-" + TS.AA + "-" + TS.AA0));
         Assertions.assertEquals(
                 1.82,
-                conversionFactors.findTripleValue("--"+TS.A+"-"+TS.AA+"-"+TS.AA0,
-                        "--"+TS.A+"-"+TS.AA+"-"+TS.AA1));
+                conversionFactors.findTripleValue("--" + TS.A + "-" + TS.AA + "-" + TS.AA0,
+                        "--" + TS.A + "-" + TS.AA + "-" + TS.AA1));
 
         Assertions.assertEquals(
                 2.08,
-                conversionFactors.findTripleValue("--"+TS.A+"-"+TS.AA+"-"+TS.AA0,
-                        "--"+TS.C+"-"+TS.CC+"-"+TS.CC7));
+                conversionFactors.findTripleValue("--" + TS.A + "-" + TS.AA + "-" + TS.AA0,
+                        "--" + TS.C + "-" + TS.CC + "-" + TS.CC7));
 
         Assertions.assertEquals(
                 2.56,
-                conversionFactors.findTripleValue("--"+TS.A+"-"+TS.AA+"-"+TS.AA2,
-                        "--"+TS.C+"-"+TS.CC+"-"+TS.CC6));
+                conversionFactors.findTripleValue("--" + TS.A + "-" + TS.AA + "-" + TS.AA2,
+                        "--" + TS.C + "-" + TS.CC + "-" + TS.CC6));
     }
 
     // test usando la tecnica delle classi di equivalenza e boundary value analysis
     @Test
     void testInvalidConversionFactor() throws LeafException {
-        controllerConfigurator.addCategory("videogame","");
+        controllerConfigurator.addCategory("videogame", "");
 
         Node parent0 = controllerConfigurator.getRootArray().get(0);
 
@@ -118,7 +121,7 @@ public class ConfiguratorTest {
 
     @Test
     void testInvalidReferenceFactor() throws LeafException {
-        controllerConfigurator.addCategory("videogame","");
+        controllerConfigurator.addCategory("videogame", "");
 
         Node parent0 = controllerConfigurator.getRootArray().get(0);
 
@@ -136,7 +139,7 @@ public class ConfiguratorTest {
 
     @Test
     void testAlreadyExistingLeaf() throws LeafException {
-        controllerConfigurator.addCategory("videogame","");
+        controllerConfigurator.addCategory("videogame", "");
 
         Node parent0 = controllerConfigurator.getRootArray().get(0);
 
@@ -154,8 +157,8 @@ public class ConfiguratorTest {
 
     @Test
     void testAlreadyExistingLeafButDifferentPath() throws LeafException {
-        controllerConfigurator.addCategory("videogame","");
-        controllerConfigurator.addCategory("film","");
+        controllerConfigurator.addCategory("videogame", "");
+        controllerConfigurator.addCategory("film", "");
 
         Node parent0 = controllerConfigurator.getRootArray().get(0);
         Node parent1 = controllerConfigurator.getRootArray().get(1);

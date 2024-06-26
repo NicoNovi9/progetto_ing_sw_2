@@ -2,6 +2,7 @@ package blackbox;
 
 import controller.ControllerConfigurator;
 import controller.ControllerUser;
+import interfaceRepository.InterfaceDatabase;
 import model.LeafException;
 import model.Model;
 import model.Node;
@@ -10,7 +11,6 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import interfaceRepository.InterfaceDatabase;
 import repository.LocalDatabase;
 import returnStatus.TransactionStatus;
 
@@ -85,7 +85,7 @@ public class TransactionsTest {
     //********************************************************************************************************
 
     @Test
-    void testAddTransaction(){
+    void testAddTransaction() {
         // con la view è guidato nella selezione del nodo
         Node n1 = controllerConfigurator.getRootArray().get(0).getChildren().get(0).getChildren().get(0);
         Node n2 = controllerConfigurator.getRootArray().get(1).getChildren().get(0).getChildren().get(0);
@@ -103,14 +103,14 @@ public class TransactionsTest {
         Assertions.assertEquals(
                 requested_hours * model
                         .getConversionFactors()
-                        .findTripleValue(n2.getPath(),n1.getPath()),
+                        .findTripleValue(n2.getPath(), n1.getPath()),
                 t.offeredHours());
-        Assertions.assertEquals(TransactionStatus.OPEN,t.status());
+        Assertions.assertEquals(TransactionStatus.OPEN, t.status());
 
     }
 
     @Test
-    void testClosedTransactions4Cicle(){
+    void testClosedTransactions4Cicle() {
         // con la view l'utente è guidato nella selezione del nodo
         // per i test vado a prendere i nodi "manualemente" dalla radice
         Node n1 = controllerConfigurator.getRootArray().get(0).getChildren().get(0).getChildren().get(0);
@@ -148,7 +148,7 @@ public class TransactionsTest {
     }
 
     @Test
-    void testCicleNotClosedBecauseDifferentDistrict(){
+    void testCicleNotClosedBecauseDifferentDistrict() {
         // con la view l'utente è guidato nella selezione del nodo
         // per i test vado a prendere i nodi "manualemente" dalla radice
         Node n1 = controllerConfigurator.getRootArray().get(0).getChildren().get(0).getChildren().get(0);

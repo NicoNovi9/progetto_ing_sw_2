@@ -4,7 +4,6 @@ import controller.ControllerUser;
 import model.Node;
 import model.Transaction;
 import returnStatus.LoginStatus;
-import returnStatus.TransactionStatus;
 import view.mylib.MyMenu;
 
 import java.util.List;
@@ -111,8 +110,8 @@ public class ViewUser extends BaseView {
             int index = scanner.nextInt();
             treeTravel(controllerUser.getNodeFromIndex(index));
         } catch (Exception e) {
-           System.out.println(FORMATO_NON_VALIDO);
-          }
+            System.out.println(FORMATO_NON_VALIDO);
+        }
 
         scanner.nextLine();
     }
