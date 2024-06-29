@@ -59,28 +59,28 @@ public class ConfiguratorTest {
     @Test
     void testConversionFactors() throws LeafException {
         // utilizzo una funzione ausiliaria per caricare un albero con struttura complessa
-        TS.loadDefaultTree(controllerConfigurator);
+        TreeSupport.loadDefaultTree(controllerConfigurator);
 
         ConversionFactors conversionFactors = controllerConfigurator.getConversionFactors();
 
         Assertions.assertEquals(
                 0.55,
-                conversionFactors.findTripleValue("--" + TS.A + "-" + TS.AA + "-" + TS.AA1,
-                        "--" + TS.A + "-" + TS.AA + "-" + TS.AA0));
+                conversionFactors.findTripleValue("--" + TreeSupport.A + "-" + TreeSupport.AA + "-" + TreeSupport.AA1,
+                        "--" + TreeSupport.A + "-" + TreeSupport.AA + "-" + TreeSupport.AA0));
         Assertions.assertEquals(
                 1.82,
-                conversionFactors.findTripleValue("--" + TS.A + "-" + TS.AA + "-" + TS.AA0,
-                        "--" + TS.A + "-" + TS.AA + "-" + TS.AA1));
+                conversionFactors.findTripleValue("--" + TreeSupport.A + "-" + TreeSupport.AA + "-" + TreeSupport.AA0,
+                        "--" + TreeSupport.A + "-" + TreeSupport.AA + "-" + TreeSupport.AA1));
 
         Assertions.assertEquals(
                 2.08,
-                conversionFactors.findTripleValue("--" + TS.A + "-" + TS.AA + "-" + TS.AA0,
-                        "--" + TS.C + "-" + TS.CC + "-" + TS.CC7));
+                conversionFactors.findTripleValue("--" + TreeSupport.A + "-" + TreeSupport.AA + "-" + TreeSupport.AA0,
+                        "--" + TreeSupport.C + "-" + TreeSupport.CC + "-" + TreeSupport.CC7));
 
         Assertions.assertEquals(
                 2.56,
-                conversionFactors.findTripleValue("--" + TS.A + "-" + TS.AA + "-" + TS.AA2,
-                        "--" + TS.C + "-" + TS.CC + "-" + TS.CC6));
+                conversionFactors.findTripleValue("--" + TreeSupport.A + "-" + TreeSupport.AA + "-" + TreeSupport.AA2,
+                        "--" + TreeSupport.C + "-" + TreeSupport.CC + "-" + TreeSupport.CC6));
     }
 
     // test usando la tecnica delle classi di equivalenza e boundary value analysis
