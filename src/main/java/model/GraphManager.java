@@ -1,6 +1,5 @@
 package model;
 
-
 import java.util.*;
 
 public class GraphManager {
@@ -35,6 +34,15 @@ public class GraphManager {
         return resolveGraphCtx.resolve(this, startingNode);
     }
 
+    public void removeNodes(List<Integer> toRemoveNodes) {
+        for (int node : toRemoveNodes) {
+            graph.remove(node);
+            for (List<Integer> adjacent : graph.values()) {
+                adjacent.removeIf(n -> n == node);
+            }
+        }
+    }
+
     //usage only for tests
     public void printGraph() {
         for (Map.Entry<Integer, List<Integer>> entry : graph.entrySet()) {
@@ -45,15 +53,6 @@ public class GraphManager {
                 System.out.print(i + " ");
             }
             System.out.println();
-        }
-    }
-
-    public void removeNodes(List<Integer> toRemoveNodes) {
-        for (int node : toRemoveNodes) {
-            graph.remove(node);
-            for (List<Integer> adjacent : graph.values()) {
-                adjacent.removeIf(n -> n == node);
-            }
         }
     }
 

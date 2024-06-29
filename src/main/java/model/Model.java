@@ -171,7 +171,6 @@ public class Model {
         return (index < 0 || index >= node.getChildren().size());
     }
 
-
     public User searchUser(String name) {
         return getUserFromDB(name);
     }
