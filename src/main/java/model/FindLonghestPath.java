@@ -10,7 +10,6 @@ public class FindLonghestPath implements ResolveGraphStrategy {
     List<List<Integer>> foundPaths;
     GraphManager graphManager;
 
-
     public FindLonghestPath() {
         this.foundPaths = new ArrayList<>();
 
@@ -72,7 +71,6 @@ public class FindLonghestPath implements ResolveGraphStrategy {
 
     private void findPathsUtil(int u, int destination, Map<Integer, Boolean> visited, List<Integer> currentPath) {
         visited.replace(u, true);
-
 
         if (u == destination) {
             updateAllPathFound(currentPath);
