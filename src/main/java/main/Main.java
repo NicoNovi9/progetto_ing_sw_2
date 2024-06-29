@@ -18,7 +18,6 @@ public class Main {
         InterfaceDatabase database = new LocalDatabase(RESOURCES_PATH);
         Model model = new Model(database);
 
-        StartView startView;
         ControllerConfigurator controllerConfigurator = new ControllerConfigurator(model);
         ControllerUser controllerUser = new ControllerUser(model);
 
@@ -31,6 +30,7 @@ public class Main {
 
         model.save();
 
+        StartView startView;
         startView = new StartView(controllerConfigurator, controllerUser);
         startView.start();
 
