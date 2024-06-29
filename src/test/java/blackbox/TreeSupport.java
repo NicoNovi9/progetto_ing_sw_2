@@ -7,7 +7,7 @@ import model.Node;
 import java.util.ArrayList;
 
 // classe per il supporto ai test con alberi complessi
-public class TS {
+public class TreeSupport {
     public static String A = "a", B = "b", C = "c";
     public static String AA = "aa", BB = "bb", CC = "cc";
     public static String AA0 = "aa0", AA1 = "aa1", AA2 = "aa2", AA3 = "aa3";
@@ -17,7 +17,7 @@ public class TS {
         controllerConfigurator.addDistrict("unibs");
         controllerConfigurator.addDistrict("unimi");
 
-        controllerConfigurator.addCategory(TS.A, "");
+        controllerConfigurator.addCategory(TreeSupport.A, "");
         controllerConfigurator.addCategory(B, "");
         controllerConfigurator.addCategory(C, "");
 

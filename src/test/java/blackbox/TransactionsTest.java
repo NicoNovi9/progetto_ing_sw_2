@@ -46,7 +46,7 @@ public class TransactionsTest {
 
         model.load();
 
-        TS.loadDefaultTree(controllerConfigurator);
+        TreeSupport.loadDefaultTree(controllerConfigurator);
         model.save();
 
 
