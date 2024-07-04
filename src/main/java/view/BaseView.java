@@ -2,11 +2,12 @@ package view;
 
 import controller.BaseController;
 import model.*;
+import returnStatus.LoginStatus;
 
 import java.util.List;
 import java.util.Scanner;
 
-public class BaseView {
+public abstract class BaseView {
     public static final String FORMATO_NON_VALIDO = "Formato non valido";
     public static final String INSERISCI_INDICE = "Inserisci indice: ";
     public static final String INDICE_ERRATO = "INDICE ERRATO";
@@ -34,7 +35,23 @@ public class BaseView {
         }
 
     }
+    public void loginView() {
+        LoginStatus loginStatus;
+        do {
+            System.out.println("LOGIN:");
+            System.out.print("Inserisci nome: ");
+            String name = scanner.nextLine();
 
+            System.out.print("Inserisci password: ");
+            String password = scanner.nextLine();
+            loginStatus = checkLogin(name, password);
+            switch (loginStatus) {
+                case ERROR -> System.out.println("\nPASSWORD NON VALIDA\n");
+                case LOGIN -> loginEff(name);
+                case FIRST_LOGIN -> loginStatus = firstLoginS(name, password);
+            }
+        } while (loginStatus != LoginStatus.LOGIN);
+    }
     public void printTree(Node n, int depth) {
         if (depth == 0) {
             System.out.println(toStringNode(n));
@@ -150,4 +167,7 @@ public class BaseView {
         }
         return buffer.toString();
     }
+    abstract LoginStatus checkLogin(String name, String password);
+    abstract void loginEff(String name);
+    abstract LoginStatus firstLoginS(String name, String password);
 }

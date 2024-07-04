@@ -6,6 +6,7 @@ import model.Transaction;
 import returnStatus.LoginStatus;
 import view.mylib.MyMenu;
 
+import javax.swing.text.html.HTML;
 import java.util.List;
 
 
@@ -169,28 +170,16 @@ public class ViewUser extends BaseView {
         return false;
     }
 
-    public void loginView() {
-        LoginStatus loginStatus;
-        do {
-            System.out.println("LOGIN:");
-            System.out.print("Inserisci nome: ");
-            String name = scanner.nextLine();
-
-            System.out.print("Inserisci password: ");
-            String password = scanner.nextLine();
-            loginStatus = controllerUser.checkLogin(name, password, TAG);
-
-            switch (loginStatus) {
-                case ERROR -> System.out.println("\nPASSWORD NON VALIDA\n");
-                case LOGIN -> {
-                    System.out.println("LOGIN EFFETTUATO");
-                    controllerUser.setCurrentUser(name);
-                }
-                case FIRST_LOGIN -> loginStatus = firstLoginUserView(name, password);
-            }
-        } while (loginStatus != LoginStatus.LOGIN);
+    public LoginStatus checkLogin(String name, String password){
+        return controllerUser.checkLogin(name, password, TAG);
     }
-
+    public void loginEff(String name){
+        System.out.println("LOGIN EFFETTUATO");
+        controllerUser.setCurrentUser(name);
+    }
+    public LoginStatus firstLoginS(String name, String password){
+        return firstLoginUserView(name, password);
+    }
     public LoginStatus firstLoginUserView(String name, String password) {
         System.out.println("\nPRIMO LOGIN");
         String newName, newPassword, email, district;
