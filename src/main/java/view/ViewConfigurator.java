@@ -82,23 +82,14 @@ public class ViewConfigurator extends BaseView {
         System.out.println(toStringConvFactor(controllerConfigurator.getConversionFactors()));
     }
 
-    public void loginView() {
-        LoginStatus loginStatus;
-        do {
-            System.out.println("LOGIN:");
-            System.out.print("Inserisci nome: ");
-            String name = scanner.nextLine();
-
-            System.out.print("Inserisci password: ");
-            String password = scanner.nextLine();
-            loginStatus = controllerConfigurator.checkLogin(name, password, TAG);
-
-            switch (loginStatus) {
-                case ERROR -> System.out.println("\nPASSWORD NON VALIDA\n");
-                case LOGIN -> System.out.println("LOGIN EFFETTUATO");
-                case FIRST_LOGIN -> loginStatus = firstLoginView(name, password);
-            }
-        } while (loginStatus != LoginStatus.LOGIN);
+    public LoginStatus checkLogin(String name, String password){
+        return controllerConfigurator.checkLogin(name, password, TAG);
+    }
+    public void loginEff(String name){
+        System.out.println("LOGIN EFFETTUATO");
+    }
+    public LoginStatus firstLoginS(String name, String password){
+        return firstLoginView(name, password);
     }
 
     public LoginStatus firstLoginView(String name, String password) {
